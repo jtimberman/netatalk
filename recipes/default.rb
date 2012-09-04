@@ -20,9 +20,9 @@ include_recipe "netatalk::build_deb"
 
 package "libpam-cracklib"
 
-directory node[:netatalk][:share_base] do
-  owner node[:netatalk][:share_base_owner]
-  group node[:netatalk][:share_base_group]
+directory node['netatalk']['share_base'] do
+  owner node['netatalk']['share_base_owner']
+  group node['netatalk']['share_base_group']
   mode "0775"
 end
 
@@ -31,6 +31,12 @@ template "/etc/netatalk/AppleVolumes.default" do
   mode "644"
   owner "root"
   group "root"
-  variables :shares => node[:netatalk][:shares]
-  notifies :restart, resources(:service => "netatalk"), :delayed
+  variables :shares => node['netatalk']['shares']
+  notifies :restart, "service[netatalk]"
+end
+
+service "netatalk" do
+  supports :restart => true
+  pattern "/usr/sbin/afpd"
+  action [:enable, :start]
 end
