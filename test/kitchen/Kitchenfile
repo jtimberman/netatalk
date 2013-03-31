@@ -1,3 +1,0 @@
-cookbook "netatalk" do
-  runtimes []
-end
