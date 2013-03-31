@@ -35,6 +35,14 @@ template "/etc/netatalk/AppleVolumes.default" do
   notifies :restart, "service[netatalk]"
 end
 
+template "/etc/netatalk/afpd.conf" do
+  source "afpd.conf.erb"
+  mode "644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[netatalk]"
+end
+
 service "netatalk" do
   supports :restart => true
   pattern "/usr/sbin/afpd"
