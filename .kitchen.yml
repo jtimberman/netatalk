@@ -1,6 +1,13 @@
 ---
 driver_plugin: vagrant
 platforms:
+- name: ubuntu-12.10
+  driver_config:
+    box: canonical-ubuntu-12.10
+    box_url: http://cloud-images.ubuntu.com/vagrant/quantal/current/quantal-server-cloudimg-amd64-vagrant-disk1.box
+    require_chef_omnibus: 11.4.0
+  run_list:
+  - recipe[apt]
 - name: ubuntu-12.04
   driver_config:
     box: canonical-ubuntu-12.04
@@ -15,22 +22,23 @@ platforms:
     require_chef_omnibus: 11.4.0
   run_list:
   - recipe[apt]
-- name: centos-6.3
+- name: debian-6.0.7
   driver_config:
-    box: opscode-centos-6.3
-    box_url: http://opscode-vm.s3.amazonaws.com/vagrant/opscode_centos-6.3_chef-11.2.0.box
+    box: opscode-debian-6.0.7
+    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_debian-6.0.7_chef-11.2.0.box
     require_chef_omnibus: 11.4.0
   run_list:
-  - recipe[yum::epel]
-- name: centos-5.8
-  driver_config:
-    box: opscode-centos-5.8
-    box_url: http://opscode-vm.s3.amazonaws.com/vagrant/opscode_centos-5.8_chef-11.2.0.box
-    require_chef_omnibus: 11.4.0
-  run_list:
-  - recipe[yum::epel]
+  - recipe[apt]
 suites:
 - name: default
   run_list:
   - recipe[netatalk]
   attributes: {}
+- name: build_deb
+  run_list:
+  - recipe[netatalk]
+  attributes: { netatalk: { package_recipe: "build_deb" } }
+- name: backport_deb
+  run_list:
+  - recipe[netatalk]
+  attributes: { netatalk: { package_recipe: "backport_deb" } }
