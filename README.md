@@ -2,36 +2,42 @@
 Description
 ===========
 
-Installs netatalk from deb-src package with SSL support.
+Installs netatalk with SSL support, for compatibility with newer
+versions of Mac OS X.
 
 Requirements
 ============
 
+Tested on the following platforms using test-kitchen (converges clean,
+OS X 10.8 client can connect).
+
 * Ubuntu 10.04, 12.04
 * Debian 6.0
+
+Previously working, but untested:
+
+* ArchLinux
 
 Attributes
 ==========
 
-The attributes set in the cookbook are used for managing settings for
-the shares that should be in AppleVolumes.default, and the base
-directory shared over AFP.
+Attributes are documented in the cookbook's metadata.
 
 Usage
 =====
 
 The default netatalk package on Debian/Ubuntu does not have SSL
 support, so newer Mac OS X clients will be unable to authenticate.
+Netatalk 2.2 is required, or the package needs to be built from source
+with SSL.
 
-Include the "netatalk" recipe on the desired node's run list. This
-recipe will include the "`netatalk::build_deb`" recipe, which
-downloads the source package and builds with SSL support. The
-build_deb recipe will install the build dependencies to use debuild to
-build the netatalk package. This does take quite some time to build.
-
-Once the package is built, it will be installed with dpkg. The base
-share directory will be created as well, and the AppleVolumes.default
-share config file will be written.
+Generally, include the default recipe on the node's run list. On older
+versions of Ubuntu/Debian, the backport PPA with Netatalk 2.2 will be
+enabled. If this is not working in your Ubuntu/Debian nodes, set the
+`node['netatalk']['package_recipe']` attribute to `build_deb` and the
+package will be built from the deb-src. The build_deb recipe will
+install the build dependencies to use debuild to build the netatalk
+package. This does take quite some time to build.
 
 The shares do need to be configured, and you can set up the attributes
 in a role, e.g. "netatalk_server" with default or override attributes:
@@ -46,11 +52,15 @@ in a role, e.g. "netatalk_server" with default or override attributes:
       ]
     }
 
+To modify the options used in `/etc/netatalk/afpd.conf`, set the
+`node['netatalk']['afpd_options']` with the entire string as the
+options line that should appear in the configuration file.
+
 License and Author
 ==================
 
 - Author:: Joshua Timberman <opensource@housepub.org>
-- Copyright 2009-2012, Joshua Timberman
+- Copyright 2009-2013, Joshua Timberman
 - Copyright 2009-2012, Opscode, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");

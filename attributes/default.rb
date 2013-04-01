@@ -16,7 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['netatalk']['shares'] = Array.new
-default['netatalk']['share_base'] = "/srv/afp_share"
-default['netatalk']['share_base_owner'] = "root"
-default['netatalk']['share_base_group'] = "root"
+
+default['netatalk']['shares'] = []
+default['netatalk']['share_base'] = '/srv/afp_share'
+default['netatalk']['share_base_owner'] = 'root'
+default['netatalk']['share_base_group'] = 'root'
+default['netatalk']['afpd_options'] = nil
+default['netatalk']['package_recipe'] = nil
+
+# need the backported package for older Debian/Ubuntu
+case node['platform']
+when 'debian'
+  default['netatalk']['package_recipe'] = 'backport_deb'
+when 'ubuntu'
+  if node['platform_version'].to_f < 11.10
+    default['netatalk']['package_recipe'] = 'backport_deb'
+  end
+when 'arch'
+  default['netatalk']['package_recipe'] = 'build_aur'
+end

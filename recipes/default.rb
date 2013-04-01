@@ -2,7 +2,7 @@
 # Cookbook Name:: netatalk
 # Recipe:: default
 #
-# Copyright 2009, Opscode
+# Copyright 2009-2012, Opscode
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,27 +16,45 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe "netatalk::build_deb"
+if node['netatalk']['package_recipe']
+  include_recipe "netatalk::#{node['netatalk']['package_recipe']}"
+end
 
-package "libpam-cracklib"
+package 'netatalk' if platform_family?('debian')
+
+package 'cracklib' do
+  package_name value_for_platform(
+    'arch' => { 'default' => 'cracklib' },
+    'default' => 'libpam-cracklib'
+  )
+end
 
 directory node['netatalk']['share_base'] do
   owner node['netatalk']['share_base_owner']
   group node['netatalk']['share_base_group']
-  mode "0775"
+  mode 02775
 end
 
-template "/etc/netatalk/AppleVolumes.default" do
-  source "AppleVolumes.default.erb"
-  mode "644"
-  owner "root"
-  group "root"
-  variables :shares => node['netatalk']['shares']
-  notifies :restart, "service[netatalk]"
+['afpd.conf', 'AppleVolumes.default'].each do |conf|
+
+  template "/etc/netatalk/#{conf}" do
+    source "#{conf}.erb"
+    mode 00644
+    owner "root"
+    group "root"
+    variables :shares => node['netatalk']['shares']
+    notifies :restart, 'service[netatalk]'
+  end
+
 end
 
-service "netatalk" do
+service 'netatalk' do
   supports :restart => true
-  pattern "/usr/sbin/afpd"
+  case node['platform_family']
+  when 'debian'
+    pattern '/usr/sbin/(afpd|cnid_metad)'
+  when 'arch'
+    service_name 'afpd'
+  end
   action [:enable, :start]
 end
