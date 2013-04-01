@@ -4,7 +4,7 @@ maintainer_email  "opensource@housepub.org"
 license           "Apache 2.0"
 description       "Installs netatalk source package on Debian/Ubuntu w/ SSL support"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "1.0.0"
+version           "1.1.0"
 
 recipe "netatalk::default", <<-DESC
 Includes the appropriate package prep recipe (if any), creates the base share directory, creates AFP config files and manages the netatalk service(s)
