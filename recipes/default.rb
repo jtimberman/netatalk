@@ -20,11 +20,12 @@ if node['netatalk']['package_recipe']
   include_recipe "netatalk::#{node['netatalk']['package_recipe']}"
 end
 
-package 'netatalk' if platform_family?('debian')
+package 'netatalk' if platform_family?('debian') || platform_family?('fedora')
 
 package 'cracklib' do
   package_name value_for_platform(
     'arch' => { 'default' => 'cracklib' },
+    'fedora' => { 'default' => 'cracklib' },
     'default' => 'libpam-cracklib'
   )
 end
