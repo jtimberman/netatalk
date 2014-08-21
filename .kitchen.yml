@@ -18,6 +18,9 @@ platforms:
   - recipe[apt]
 
 - name: fedora-20
+- name: centos-6.5
+  run_list:
+  - recipe[yum-epel]
 
 suites:
 - name: default
