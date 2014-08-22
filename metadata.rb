@@ -20,7 +20,7 @@ recipe "netatalk::build_aur", "Builds Netatalk package from Arch User Repository
 
 supports "debian", ">= 6.0"
 supports "ubuntu", ">= 10.04"
-supports "fedora", ">= 19"
+supports "fedora", ">= 19.0"
 supports "redhat", ">= 5.0"
 supports "centos", ">= 5.0"
 supports "scientific", ">= 5.0"
