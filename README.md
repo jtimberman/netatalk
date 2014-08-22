@@ -13,6 +13,8 @@ OS X 10.8 client can connect).
 
 * Ubuntu 10.04, 12.04
 * Debian 6.0
+* CentOS 6.5
+* Fedora 20
 
 Previously working, but untested:
 
