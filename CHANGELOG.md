@@ -1,3 +1,8 @@
+## v1.1.1:
+
+* Added CentOS and Fedora support
+* Remove end-of-life Ubuntus from test matrix
+
 ## v1.0.0:
 
 * Resolve foodcritic warnings
